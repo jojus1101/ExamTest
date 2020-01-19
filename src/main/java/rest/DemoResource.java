@@ -1,7 +1,9 @@
 package rest;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import entities.User;
+import facades.FacadeExample;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
@@ -22,7 +24,8 @@ import utils.EMF_Creator;
 public class DemoResource {
 
     private static EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.CREATE);
-
+    private static final FacadeExample FACADE = FacadeExample.getFacadeExample(EMF);
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     @Context
     private UriInfo context;
 
@@ -66,5 +69,18 @@ public class DemoResource {
     public String getFromAdmin() {
         String thisuser = securityContext.getUserPrincipal().getName();
         return "{\"msg\": \"Hello to (admin) User: " + thisuser + "\"}";
+    }
+    @GET
+    @Path("populate")
+    @Produces({MediaType.APPLICATION_JSON})
+    public String populateDatabase() {
+
+        boolean success = FACADE.Populate();
+
+        if (success) {
+            return "{\"message\":\"Database has been populated\"}";
+        } else {
+            return "{\"message\":\"Failed to populate database. feelsbadman\"}";
+        }
     }
 }
