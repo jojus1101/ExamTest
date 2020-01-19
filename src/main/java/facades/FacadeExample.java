@@ -51,7 +51,7 @@ public class FacadeExample {
 
     }
 
-    public boolean Populate() {
+    public void Populate() {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
@@ -78,14 +78,6 @@ public class FacadeExample {
             em.persist(nobody);
             System.out.println("Saved test data to database");
             em.getTransaction().commit();
-            return true;
-            
-        } catch (Exception e) {
-            System.out.println("hmmmmmmmmm");
-            e.printStackTrace();
-            System.out.println("hmmmmm...");
-            em.getTransaction().rollback();
-            return false;
         } finally {
             em.close();
         }

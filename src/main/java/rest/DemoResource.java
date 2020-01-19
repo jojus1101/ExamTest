@@ -75,12 +75,7 @@ public class DemoResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String populateDatabase() {
 
-        boolean success = FACADE.Populate();
-
-        if (success) {
-            return "{\"message\":\"Database has been populated\"}";
-        } else {
-            return "{\"message\":\"Failed to populate database. feelsbadman\"}";
-        }
+        FACADE.Populate();
+        return "{\"Message\":\"Database populated\"}";
     }
 }
