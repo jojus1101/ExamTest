@@ -118,8 +118,22 @@ public class BikeFacade {
             s1 = new Storage("Storvej 30", 2000);
             s2 = new Storage("Storvej 31", 1500);
             
-
-            em.getTransaction().begin();
+            
+            
+            em.persist(b1);
+            em.persist(b2);
+            em.persist(b3);
+            em.persist(b4);
+            em.persist(r1);
+            em.persist(r2);
+            em.persist(r3);
+            em.persist(r4);
+            em.persist(m1);
+            em.persist(m2);
+            em.persist(m3);
+            em.persist(m4);
+            em.persist(s1);
+            em.persist(s2);
             System.out.println("Saved test data to database");
             em.getTransaction().commit();
         } finally {

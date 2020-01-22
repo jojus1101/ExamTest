@@ -5,6 +5,8 @@
  */
 package entities;
 
+import DTO.MemberDTO;
+import DTO.RentalDTO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  *
@@ -24,7 +27,7 @@ import javax.persistence.OneToMany;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name="Member.getAll", query = "SELECT m FROM Member m "),
+    @NamedQuery(name ="Member.getAll", query = "SELECT m FROM Member m"),
     @NamedQuery(name ="Member.deleteAllRows", query = "DELETE FROM Member")
 })
 public class Member implements Serializable {
@@ -37,9 +40,8 @@ public class Member implements Serializable {
     private String signedUpDate;
     private String account;
     
-    @OneToMany(cascade = { CascadeType.PERSIST })
-    @JoinColumn
-    List<Rental>rentalList = new ArrayList();
+    @OneToMany(mappedBy="member", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Rental>rentalList = new ArrayList();
     
     public void addRental(Rental rental){
         rentalList.add(rental);
@@ -57,6 +59,15 @@ public class Member implements Serializable {
 
     
     public Member() {
+    }
+    public Member(MemberDTO member) {
+        this.id = member.getId();
+        this.name = member.getName();
+        this.signedUpDate = member.getSignedUpDate();
+        this.account = member.getAccount();
+        for (RentalDTO r : member.getRentalList()){
+            rentalList.add(new Rental(r));
+        }
     }
     
     
