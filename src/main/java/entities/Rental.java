@@ -22,7 +22,7 @@ import javax.persistence.NamedQuery;
 @Entity
 @NamedQueries({
     @NamedQuery(name ="Rental.getAll", query = "SELECT r FROM Rental r"),
-    @NamedQuery(name ="Rental.deleteAllRows", query = "DELTE FROM Rental")
+    @NamedQuery(name ="Rental.deleteAllRows", query = "DELETE FROM Rental")
 })
 public class Rental implements Serializable {
 
