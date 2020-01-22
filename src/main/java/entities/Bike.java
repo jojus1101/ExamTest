@@ -5,6 +5,8 @@
  */
 package entities;
 
+import DTO.BikeDTO;
+import DTO.RentalDTO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +45,7 @@ public class Bike implements Serializable {
     private Storage storage;
      
      @OneToMany(mappedBy="bike", cascade = { CascadeType.PERSIST }) // Non owning side
-    private List<Rental> rentalList = new ArrayList<>();
+    private List<Rental> rentalList;
 
     public Long getId() {
         return id;
@@ -56,15 +58,27 @@ public class Bike implements Serializable {
     public Bike() {
     }
 
-    public Bike(String make, String size, String gender, int gears, int datePrice, Storage storage) {
+    public Bike(String make, String size, String gender, int gears, int datePrice) {
         this.make = make;
         this.size = size;
         this.gender = gender;
         this.gears = gears;
         this.datePrice = datePrice;
-        this.storage = storage;
     }
 
+
+    public Bike(BikeDTO bike ) {
+        this.id = bike.getId();
+        this.datePrice = bike.getDatePrice();
+        this.gears = bike.getGears();
+        this.make = bike.getMake();
+        this.gender = bike.getGender();
+        this.size = bike.getSize();
+        this.storage = bike.getStorage();
+        for (RentalDTO rental : bike.getRentalList()){
+            rentalList.add(new Rental(rental));
+        }
+    }
     public Storage getStorage() {
         return storage;
     }

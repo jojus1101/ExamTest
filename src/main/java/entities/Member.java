@@ -91,6 +91,7 @@ public class Member implements Serializable {
     public void setAccount(String account) {
         this.account = account;
     }
+    
 
     
 

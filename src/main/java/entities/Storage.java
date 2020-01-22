@@ -5,6 +5,8 @@
  */
 package entities;
 
+import DTO.BikeDTO;
+import DTO.StorageDTO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +48,14 @@ public class Storage implements Serializable {
 
     public Storage() {
     }
-    
+    public Storage(StorageDTO storage) {
+        this.id = storage.getId();
+        this.address = storage.getAddress();
+        this.capacity = storage.getCapacity();
+        for (BikeDTO bike : storage.getBikeList()){
+            bikeList.add(new Bike(bike));
+        }
+    }
     public Long getId() {
         return id;
     }

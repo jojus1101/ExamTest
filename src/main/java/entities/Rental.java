@@ -5,6 +5,7 @@
  */
 package entities;
 
+import DTO.RentalDTO;
 import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -21,8 +22,8 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name ="Rental.getAll", query = "SELECT r FROM Rental r"),
-    @NamedQuery(name ="Rental.deleteAllRows", query = "DELETE FROM Rental")
+    @NamedQuery(name = "Rental.getAll", query = "SELECT r FROM Rental r"),
+    @NamedQuery(name = "Rental.deleteAllRows", query = "DELETE FROM Rental")
 })
 public class Rental implements Serializable {
 
@@ -31,11 +32,11 @@ public class Rental implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String date;
-    
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE }) // Owning side
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}) // Owning side
     private Bike bike;
-    
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE})
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Member member;
 
     public Long getId() {
@@ -46,9 +47,15 @@ public class Rental implements Serializable {
         this.id = id;
     }
 
-    public Rental(String date, Bike bike) {
+    public Rental(String date) {
         this.date = date;
-        this.bike = bike;
+    }
+
+    public Rental(RentalDTO rental) {
+        this.id = rental.getId();
+        this.date = rental.getDate();
+        this.bike = rental.getBike();
+        this.member = rental.getMember();
     }
 
     public Rental() {
@@ -68,6 +75,14 @@ public class Rental implements Serializable {
 
     public void setBike(Bike bike) {
         this.bike = bike;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
     }
     
 
@@ -95,5 +110,5 @@ public class Rental implements Serializable {
     public String toString() {
         return "entities.Rental[ id=" + id + " ]";
     }
-    
+
 }
