@@ -15,7 +15,7 @@ import java.util.List;
  * @author jojus1101
  */
 public class StorageDTO {
-    private Long id;
+    private int id;
     private String address;
     private int capacity;
     private List<BikeDTO> bikeList = new ArrayList<>();
@@ -33,11 +33,11 @@ public class StorageDTO {
         }
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

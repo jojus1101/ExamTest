@@ -8,8 +8,8 @@ package entities;
 import DTO.BikeDTO;
 import DTO.RentalDTO;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,22 +19,25 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  *
  * @author jojus1101
  */
 @Entity
+@Table(name = "Bike")
 @NamedQueries({
-    @NamedQuery(name ="Bike.getAll", query = "SELECT b FROM Bike b"),
-    @NamedQuery(name ="Bike.deleteAllRows", query = "DELETE FROM Bike")
+    @NamedQuery(name = "Bike.getAll", query = "SELECT b FROM Bike b"),
+    @NamedQuery(name = "Bike.deleteAllRows", query = "DELETE FROM Bike")
+    
 })
 public class Bike implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Integer id;
     private String make;
     private String size;
     private String gender;
@@ -47,11 +50,11 @@ public class Bike implements Serializable {
      @OneToMany(mappedBy="bike", cascade = { CascadeType.PERSIST }) // Non owning side
     private List<Rental> rentalList;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -130,23 +133,47 @@ public class Bike implements Serializable {
     public void setDatePrice(int datePrice) {
         this.datePrice = datePrice;
     }
-    
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 5;
+        hash = 37 * hash + this.id;
+        hash = 37 * hash + Objects.hashCode(this.make);
+        hash = 37 * hash + Objects.hashCode(this.size);
+        hash = 37 * hash + Objects.hashCode(this.gender);
+        hash = 37 * hash + this.gears;
+        hash = 37 * hash + this.datePrice;
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Bike)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Bike other = (Bike) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Bike other = (Bike) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (this.gears != other.gears) {
+            return false;
+        }
+        if (this.datePrice != other.datePrice) {
+            return false;
+        }
+        if (!Objects.equals(this.make, other.make)) {
+            return false;
+        }
+        if (!Objects.equals(this.size, other.size)) {
+            return false;
+        }
+        if (!Objects.equals(this.gender, other.gender)) {
             return false;
         }
         return true;
@@ -154,7 +181,7 @@ public class Bike implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Bike[ id=" + id + " ]";
+        return "Bike{" + "id=" + id + ", make=" + make + ", size=" + size + ", gender=" + gender + ", gears=" + gears + ", datePrice=" + datePrice + '}';
     }
-    
+ 
 }

@@ -14,7 +14,7 @@ import entities.Rental;
  * @author jojus1101
  */
 public class RentalDTO {
-    private Long id;
+    private int id;
     private String date;
     private Bike bike;
     private Member member;
@@ -29,11 +29,11 @@ public class RentalDTO {
     }
 
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

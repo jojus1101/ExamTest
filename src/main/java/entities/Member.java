@@ -5,17 +5,14 @@
  */
 package entities;
 
-import DTO.MemberDTO;
-import DTO.RentalDTO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -26,6 +23,7 @@ import javax.persistence.Table;
  * @author jojus1101
  */
 @Entity
+@Table(name = "Member")
 @NamedQueries({
     @NamedQuery(name ="Member.getAll", query = "SELECT m FROM Member m"),
     @NamedQuery(name ="Member.deleteAllRows", query = "DELETE FROM Member")
@@ -35,20 +33,14 @@ public class Member implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Integer id;
     private String name;
     private String signedUpDate;
     private String account;
-    
-    @OneToMany(mappedBy="member", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Rental>rentalList = new ArrayList();
-    
-    public void addRental(Rental rental){
-        rentalList.add(rental);
-    }
-    
-    public List<Rental> getRentalList() {
-        return rentalList;
+
+    @OneToMany
+    private List<Rental> rentalList = new ArrayList();
+    public Member() {
     }
 
     public Member(String name, String signedUpDate, String account) {
@@ -58,24 +50,11 @@ public class Member implements Serializable {
     }
 
     
-    public Member() {
-    }
-    public Member(MemberDTO member) {
-        this.id = member.getId();
-        this.name = member.getName();
-        this.signedUpDate = member.getSignedUpDate();
-        this.account = member.getAccount();
-        for (RentalDTO r : member.getRentalList()){
-            rentalList.add(new Rental(r));
-        }
-    }
-    
-    
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -102,25 +81,48 @@ public class Member implements Serializable {
     public void setAccount(String account) {
         this.account = account;
     }
-    
+
+    public List<Rental> getRentalList() {
+        return rentalList;
+    }
+
+    public void setRentalList(List<Rental> rentalList) {
+        this.rentalList = rentalList;
+    }
 
     
-
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 5;
+        hash = 79 * hash + Objects.hashCode(this.id);
+        hash = 79 * hash + Objects.hashCode(this.name);
+        hash = 79 * hash + Objects.hashCode(this.signedUpDate);
+        hash = 79 * hash + Objects.hashCode(this.account);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Member)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Member other = (Member) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Member other = (Member) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.signedUpDate, other.signedUpDate)) {
+            return false;
+        }
+        if (!Objects.equals(this.account, other.account)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
@@ -128,7 +130,9 @@ public class Member implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Member[ id=" + id + " ]";
+        return "Member{" + "id=" + id + ", name=" + name + ", signedUpDate=" + signedUpDate + ", account=" + account + '}';
     }
+
+    
     
 }

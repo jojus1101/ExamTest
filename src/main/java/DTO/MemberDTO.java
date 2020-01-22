@@ -14,7 +14,7 @@ import java.util.List;
  * @author jojus1101
  */
 public class MemberDTO {
-    private Long id;
+    private int id;
     private String name;
     private String signedUpDate;
     private String account;
@@ -33,11 +33,11 @@ public class MemberDTO {
         }
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

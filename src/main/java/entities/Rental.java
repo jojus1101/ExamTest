@@ -7,6 +7,7 @@ package entities;
 
 import DTO.RentalDTO;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,22 +16,24 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 /**
  *
  * @author jojus1101
  */
 @Entity
+@Table(name="Rental")
 @NamedQueries({
-    @NamedQuery(name = "Rental.getAll", query = "SELECT r FROM Rental r"),
-    @NamedQuery(name = "Rental.deleteAllRows", query = "DELETE FROM Rental")
+    @NamedQuery(name= "Rental.getAll", query = "SELECT r FROM Rental r"),
+    @NamedQuery(name= "Rental.deleteAllRows", query = "DELETE FROM Rental")
 })
 public class Rental implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Integer id;
     private String date;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}) // Owning side
@@ -39,11 +42,11 @@ public class Rental implements Serializable {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Member member;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -84,23 +87,31 @@ public class Rental implements Serializable {
     public void setMember(Member member) {
         this.member = member;
     }
-    
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.id);
+        hash = 79 * hash + Objects.hashCode(this.date);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Rental)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Rental other = (Rental) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Rental other = (Rental) obj;
+        if (!Objects.equals(this.date, other.date)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
@@ -108,7 +119,7 @@ public class Rental implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Rental[ id=" + id + " ]";
+        return "Rental{" + "id=" + id + ", date=" + date + '}';
     }
-
+    
 }
