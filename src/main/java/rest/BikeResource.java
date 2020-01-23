@@ -10,9 +10,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import facades.BikeFacade;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -26,6 +31,7 @@ import utils.EMF_Creator;
  */
 @Path("bike")
 public class BikeResource {
+
     private static EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.CREATE);
     private static final BikeFacade FACADE = BikeFacade.getBikeFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -40,6 +46,7 @@ public class BikeResource {
     public String getInfoForAll() {
         return "{\"msg\":\"Hello tester\"}";
     }
+
     @GET
     @Path("populatebike")
     @Produces({MediaType.APPLICATION_JSON})
@@ -48,11 +55,30 @@ public class BikeResource {
         FACADE.PopulateDB();
         return "{\"Message\":\"Database ready\"}";
     }
+
     @GET
     @Path("bikes")
     @Produces({MediaType.APPLICATION_JSON})
     public List<BikeDTO> getBikes() {
         return FACADE.getBikeList();
-        
+
+    }
+
+    @PUT
+    @Path("bikeedit")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    @RolesAllowed({"admin"})
+    public BikeDTO editBike(BikeDTO bike) {
+        return FACADE.editBike(bike);
+    }
+
+    @DELETE
+    @Path("recipe/{id}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    @RolesAllowed({"admin"})
+    public BikeDTO deleteBike(@PathParam("id") int id) throws Exception {
+        return FACADE.deleteBike(id);
     }
 }

@@ -71,6 +71,36 @@ public class BikeFacade {
             em.close();
         }
     }
+        public BikeDTO deleteBike(int id) throws Exception{
+        EntityManager em = getEntityManager();
+        Bike result;
+        try {
+            result = em.find(Bike.class, id);
+            em.getTransaction().begin();
+            em.remove(result);
+            em.getTransaction().commit();
+            return new BikeDTO(result);
+        } finally {
+            em.close();
+        }
+    }
+         public BikeDTO editBike(BikeDTO bikeDTO) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Bike bike = em.find(Bike.class, bikeDTO.getId());
+            bike.setDatePrice(bikeDTO.getDatePrice());
+            bike.setGears(bikeDTO.getGears());
+            bike.setGender(bikeDTO.getGender());
+            bike.setMake(bikeDTO.getMake());
+            bike.setSize(bikeDTO.getSize());
+            em.merge(bike);
+            em.getTransaction().commit();
+            return new BikeDTO(bike);
+        } finally {
+            em.close();
+        }
+    }
 
     public void PopulateDB() {
         EntityManager em = getEntityManager();
